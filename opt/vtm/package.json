@@ -1,0 +1,7 @@
+{
+  "name": "Visual Time Machine",
+  "version": "2",
+  "dependencies": {
+    "discord.js": "^11.4.2"
+  }
+}
