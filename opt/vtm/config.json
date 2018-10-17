@@ -1,0 +1,8 @@
+{
+	"webhook": {
+		"id": "paste_id_here",
+		"token": "paste_token_here"
+	},
+	"interval": 5000,
+	"capture_console_only": true
+}
