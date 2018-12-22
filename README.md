@@ -43,7 +43,8 @@ The following steps depend on your platform & options.
 7. Install PM2: Run `npm install pm2 -g` in a command prompt.
 8. Run `npm install pm2-windows-startup -g` and `pm2-startup install` to make the PM2 daemon start at boot.
 9. cd to the program's directory and run `pm2 start index.js --name "Visual Time Machine"`
-10. Run `pm2 save` to save the process list so it'll restart at boot.
+10. Run `pm2 save` to save the process list so it'll be reloaded at reboot.
+
 This installation is single-user. If the display is switched to another user the screenshotter will capture black screens.
 
 ### Linux
