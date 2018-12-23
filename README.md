@@ -2,7 +2,7 @@ Ever wanted to go back in time and see what was on your screen at some point in 
 
 Visual Time Machine is a simple Node script that runs as a daemon to capture your screen at a regular interval (5 seconds is default). It exploits Discord as an unlimited image store for the screenshots. You can scroll up your Discord channel or use the search feature to see what was on your screen at any point in the past with ~5 second precision, after you started using VTM.
 
-## Install
+# Install
 1. [Install Node.js](https://nodejs.org/en/download/) version >=10 if you haven't already.
 2. [Download the repository as zip](https://github.com/ledlamp/Visual-Time-Machine/archive/master.zip) and extract it.
 3. Open a Terminal/Command Prompt in the folder and run `npm install` to download dependencies.
@@ -23,29 +23,41 @@ The interval is time in milliseconds _between_ captures. Setting it to 0 will ma
 
 (Mac only) If `capture_console_only` is set to true, the screen will only be captured if it is on the physical display. This prevents the user's screen from being captured when it's not being used, though that means it won't be captured if it is used remotely.
 
+6. Test the program by running `node index.js` in a Terminal.
+
 The following steps depend on your platform & options.
 
-### Mac OS (global)
-6. Move the directory somewhere global. I put it at `/opt/vtm`.
-7. Move `io.github.ledlamp.vtm.plist` into `/Library/LaunchAgents`.
-8. If you put it somewhere other than `/opt/vtm`, update the path to the script in the plist. Edit the path to node if that's different too.
-9. Make sure the files are owned by root: run `chown -R root /opt/vtm` and `chown root /Library/LaunchAgents/io.github.ledlamp.vtm.plist`. launchd doesn't like other people owning its plists!
-10. Run `launchctl load -w ~/Library/LaunchAgents/io.github.ledlamp.vtm.plist` in each active user to start the agent without re-logging in. It will automatically run for each user who logs in and vice-versa. Enable `capture_console_only` option if you use multiple user accounts and don't want them all uploading screenshots when you're only using one.
+## Mac OS
+### All users
+7. Move the directory somewhere global. I put it at `/opt/vtm`.
+8. Move `io.github.ledlamp.vtm.plist` into `/Library/LaunchAgents`.
+9. If you put it somewhere other than `/opt/vtm`, update the path to the script in the plist. Edit the path to node if that's different too.
+10. Make sure the files are owned by root: run `chown -R root /opt/vtm` and `chown root /Library/LaunchAgents/io.github.ledlamp.vtm.plist`. launchd doesn't like other people owning its plists!
+11. Run `launchctl load -w ~/Library/LaunchAgents/io.github.ledlamp.vtm.plist` in each active user to start the agent without re-logging in. It will automatically run for each user who logs in and vice-versa. Enable `capture_console_only` option if you use multiple user accounts and don't want them all uploading screenshots when you're only using one.
 
-### Mac OS (single user)
-6. Rename and move the folder wherever you want in your home directory. You could move it to `~/Library/Visual Time Machine`.
-7. Edit the file `io.github.ledlamp.vtm.plist` with the full path to the working directory, for example `/Users/you/Library/Visual Time Machine`. launchd does _NOT_ support globbing in the WorkingDirectory value so you have to specify the full path. If node is somewhere other than `/usr/local/bin/node`, update that path as well
-8. Move the `io.github.ledlamp.vtm.plist` file into your `~/Library/LaunchAgents`.
-9. Run `launchctl load -w ~/Library/LaunchAgents/io.github.ledlamp.vtm.plist` to start the agent. It will automatically start and stop whenever you login and logout.
+### Single user
+7. Rename and move the folder wherever you want in your home directory. You could move it to `~/Library/Visual Time Machine`.
+8. Edit the file `io.github.ledlamp.vtm.plist` with the full path to the working directory, for example `/Users/you/Library/Visual Time Machine`. launchd does _NOT_ support globbing in the WorkingDirectory value so you have to specify the full path. If node is somewhere other than `/usr/local/bin/node`, update that path as well
+9. Move the `io.github.ledlamp.vtm.plist` file into your `~/Library/LaunchAgents`.
+10. Run `launchctl load -w ~/Library/LaunchAgents/io.github.ledlamp.vtm.plist` to start the agent. It will automatically start and stop whenever you login and logout.
 
-### Windows
-6. Put the directory wherever you want. I put mine at `C:\Program Files\Visual Time Machine`.
-7. Install PM2: Run `npm install pm2 -g` in a command prompt.
-8. Run `npm install pm2-windows-startup -g` and `pm2-startup install` to make the PM2 daemon start at boot.
-9. cd to the program's directory and run `pm2 start index.js --name "Visual Time Machine"`
-10. Run `pm2 save` to save the process list so it'll be reloaded at reboot.
+## Windows
+7. Put the directory wherever you want. I put mine at `C:\Program Files\Visual Time Machine`.
+8. Install PM2: Run `npm install pm2 -g` in a command prompt.
+9. Run `npm install pm2-windows-startup -g` and `pm2-startup install` to make the PM2 daemon start at boot.
+10. cd to the program's directory and run `pm2 start index.js --name "Visual Time Machine"`
+11. Run `pm2 save` to save the process list so it'll be reloaded at reboot.
 
 This installation is single-user. If the display is switched to another user the screenshotter will capture black screens.
 
-### Linux
-Linux support will be added next time I'm on my Linux system. Open an issue if you want it now.
+## Linux (Ubuntu)
+7. ImageMagick is required on Linux: `sudo apt install imagemagick`
+### All users
+8. Put the directory at `/opt/vtm` or somewhere global. If putting it somewhere else, make sure to update the path in the desktop file.
+9. Move `visual-time-machine.desktop` into `/etc/xdg/autostart` or wherever the global autostart applications are.
+10. The daemon should start with each user who logs in to their X session. You can start it without re-logging with `nohup node index.js &` in the program directory.
+
+Note: The screenshotter will continue to capture black screens when the user session is locked or switched out. Also, apparently the program does not exit when logging out, but it will stop capturing as there's no X session. When logging back in, another process will start and both will be capturing at the same time.
+
+### Single user
+todo I have not figured this out yet but you can try using .xsession or your environment's 'login applications' feature

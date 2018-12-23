@@ -20,7 +20,7 @@ async function capture() {
 	} else if (process.platform == "win32") {
 		exec(`"${__dirname}/screenCapture.exe" "${filepath}"`, {windowsHide: true});
 	} else {
-		console.error("Platform not supported!"); process.exit(1);
+		exec(`import -silent -window root "${filepath}"`);
 	}
 	var data = fs.readFileSync(filepath);
 	try {
