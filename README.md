@@ -63,6 +63,7 @@ Note: The screenshotter will continue to capture black screens when the user ses
 You could use the same kind of method used for global installation (XDG autostart) by putting the desktop file in your `~.config/autostart`, but an alternative method that is probably better due to the lack of the issues noted above is to simply start the process at boot using systemd, crontab, or pm2. The process will just be always there but only function when you are logged in to your X session.
 
 Crontab is the simplest method:
+
 7. Put the directory somewhere in your user account, maybe at `~/.vtm`.
 8. Type `crontab -e` in a terminal and add the line `@reboot /usr/bin/node $HOME/.vtm/index.js` (adjust paths as necessary)
 9. Start the program without a reboot with `node ~/.vtm/index.js & disown`.
