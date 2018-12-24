@@ -3,7 +3,8 @@ Ever wanted to go back in time and see what was on your screen at some point in 
 Visual Time Machine is a simple Node script that runs as a daemon to capture your screen at a regular interval (5 seconds is default). It exploits Discord as an unlimited image store for the screenshots. You can scroll up your Discord channel or use the search feature to see what was on your screen at any point in the past with ~5 second precision, after you started using VTM.
 
 # Install
-1. [Install Node.js](https://nodejs.org/en/download/) version >=10 if you haven't already.
+0. [Install Node.js](https://nodejs.org/en/download/) version >=10 if you haven't already.
+1. If on Linux, ImageMagick (specifically, the `import` command) is required: `sudo apt install imagemagick`
 2. [Download the repository as zip](https://github.com/ledlamp/Visual-Time-Machine/archive/master.zip) and extract it.
 3. Open a Terminal/Command Prompt in the folder and run `npm install` to download dependencies.
 4. Create a file named config.json and paste these contents.
@@ -51,13 +52,17 @@ The following steps depend on your platform & options.
 This installation is single-user. If the display is switched to another user the screenshotter will capture black screens.
 
 ## Linux (Ubuntu)
-7. ImageMagick is required on Linux: `sudo apt install imagemagick`
 ### All users
-8. Put the directory at `/opt/vtm` or somewhere global. If putting it somewhere else, make sure to update the path in the desktop file.
-9. Move `visual-time-machine.desktop` into `/etc/xdg/autostart` or wherever the global autostart applications are.
-10. The daemon should start with each user who logs in to their X session. You can start it without re-logging with `nohup node index.js &` in the program directory.
+7. Put the directory at `/opt/vtm` or somewhere global. If putting it somewhere else, make sure to update the path in the desktop file.
+8. Move `visual-time-machine.desktop` into `/etc/xdg/autostart` or wherever the global autostart applications are.
+9. The daemon should start with each user who logs in to their X session. You can start it without re-logging with `node index.js & disown` in the program directory.
 
 Note: The screenshotter will continue to capture black screens when the user session is locked or switched out. Also, apparently the program does not exit when logging out, but it will stop capturing as there's no X session. When logging back in, another process will start and both will be capturing at the same time.
 
 ### Single user
-todo I have not figured this out yet but you can try using .xsession or your environment's 'login applications' feature
+You could use the same kind of method used for global installation (XDG autostart) by putting the desktop file in your `~.config/autostart`, but an alternative method that is probably better due to the lack of the issues noted above is to simply start the process at boot using systemd, crontab, or pm2. The process will just be always there but only function when you are logged in to your X session.
+
+Crontab is the simplest method:
+7. Put the directory somewhere in your user account, maybe at `~/.vtm`.
+8. Type `crontab -e` in a terminal and add the line `@reboot /usr/bin/node $HOME/.vtm/index.js` (adjust paths as necessary)
+9. Start the program without a reboot with `node ~/.vtm/index.js & disown`.
