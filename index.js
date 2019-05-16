@@ -36,5 +36,7 @@ async function capture() {
 (function loop(){
 	capture().finally(()=>{
 		setTimeout(loop, config.interval);
-	}).catch(()=>{});
+	}).catch(rejection => {
+		if (process.env.DEBUG) console.error(rejection);
+	});
 })();
