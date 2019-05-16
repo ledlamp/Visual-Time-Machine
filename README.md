@@ -3,8 +3,9 @@ Ever wanted to go back in time and see what was on your screen at some point in 
 Visual Time Machine is a simple Node script that runs as a daemon to capture your screen at a regular interval (5 seconds is default). It exploits Discord as an unlimited image store for the screenshots. You can scroll up your Discord channel or use the search feature to see what was on your screen at any point in the past with ~5 second precision, after you started using VTM.
 
 # Install
-0. [Install Node.js](https://nodejs.org/en/download/) version >=10 if you haven't already.
-1. If on Linux, ImageMagick (specifically, the `import` command) is required: `sudo apt install imagemagick`
+1. [Install Node.js](https://nodejs.org/en/download/) version >=10 if you haven't already.
+	- If on Linux, ImageMagick (specifically, the `import` command) is required: `sudo apt install imagemagick`
+	- [.NET framework](https://dotnet.microsoft.com/download/thank-you/net48) must be installed for screen capturing on Windows.
 2. [Download the repository as zip](https://github.com/ledlamp/Visual-Time-Machine/archive/master.zip) and extract it.
 3. Open a Terminal/Command Prompt in the folder and run `npm install` to download dependencies.
 4. Create a file named config.json and paste these contents.
