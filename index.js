@@ -3,16 +3,19 @@ var fs = require("fs");
 var crypto = require("crypto");
 var os = require("os");
 var Discord = require("discord.js");
-
 var config = require("./config");
-if (process.platform == "darwin" && config.capture_console_only) {
-	var whoiam = exec("id -un").toString().trim();
-}
 
 var webhook = new Discord.WebhookClient(config.webhook.id, config.webhook.token);
 
 async function capture() {
-	if (process.platform == "darwin" && config.capture_console_only && exec("stat -f '%Su' /dev/console").toString().trim() != whoiam) throw "Not console";
+	if (process.platform == "darwin" && config.capture_console_only && exec("stat -f '%Su' /dev/console").toString().trim() != os.userInfo().username) throw "Not console";
+	if (process.platform == "win32") {
+		try {
+			exec("query user", {windowsHide: true}); // fsr this exits with code 1 which node considers an error
+		} catch(cp) {
+			if (cp.stdout.toString().split('\n').find(x => x.startsWith('>')).substr(46, 4) == "Disc") throw "Inactive session"; // will capture black screen otherwise
+		}
+	}
 	var filename = `${new Date().toISOString().replace(/:/g, '-')}_${encodeURIComponent(crypto.randomBytes(16).toString('base64'))}.jpg`
 	var filepath = os.tmpdir() + '/' + filename;
 	if (process.platform == "darwin") {
