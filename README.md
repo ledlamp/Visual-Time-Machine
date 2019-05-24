@@ -25,7 +25,7 @@ The interval is time in milliseconds _between_ captures. Setting it to 0 will ma
 
 (Mac only) If `capture_console_only` is set to true, the screen will only be captured if it is on the physical display. This prevents the user's screen from being captured when it's not being used, though that means it won't be captured if it is used remotely.
 
-6. Test the program by running `node index.js` in a Terminal.
+6. Test the program by running `node vtm.js` in a Terminal.
 
 The following steps depend on your platform & options.
 
@@ -47,7 +47,7 @@ The following steps depend on your platform & options.
 7. Put the directory wherever you want. I put mine at `C:\Program Files\Visual Time Machine`.
 8. Install PM2: Run `npm install pm2 -g` in a command prompt.
 9. Run `npm install pm2-windows-startup -g` and `pm2-startup install` to make the PM2 daemon start at boot.
-10. cd to the program's directory and run `pm2 start index.js --name "Visual Time Machine"`
+10. cd to the program's directory and run `pm2 start vtm.js`
 11. Run `pm2 save` to save the process list so it'll be reloaded at reboot.
 
 This installation is single-user. If the display is switched to another user the screenshotter will capture black screens.
@@ -56,7 +56,7 @@ This installation is single-user. If the display is switched to another user the
 ### All users
 7. Put the directory at `/opt/vtm` or somewhere global. If putting it somewhere else, make sure to update the path in the desktop file.
 8. Move `visual-time-machine.desktop` into `/etc/xdg/autostart` or wherever the global autostart applications are.
-9. The daemon should start with each user who logs in to their X session. You can start it without re-logging with `node index.js & disown` in the program directory.
+9. The daemon should start with each user who logs in to their X session. You can start it without re-logging with `node vtm.js & disown` in the program directory.
 
 Note: The screenshotter will continue to capture black screens when the user session is locked or switched out. Also, apparently the program does not exit when logging out, but it will stop capturing as there's no X session. When logging back in, another process will start and both will be capturing at the same time.
 
@@ -66,5 +66,5 @@ You could use the same kind of method used for global installation (XDG autostar
 Crontab is the simplest method:
 
 7. Put the directory somewhere in your user account, maybe at `~/.vtm`.
-8. Type `crontab -e` in a terminal and add the line `@reboot /usr/bin/node $HOME/.vtm/index.js` (adjust paths as necessary)
-9. Start the program without a reboot with `node ~/.vtm/index.js & disown`.
+8. Type `crontab -e` in a terminal and add the line `@reboot /usr/bin/node $HOME/.vtm/vtm.js` (adjust paths as necessary)
+9. Start the program without a reboot with `node ~/.vtm/vtm.js & disown`.

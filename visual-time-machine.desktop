@@ -1,5 +1,5 @@
 [Desktop Entry]
 Name=Visual Time Machine
 Type=Application
-Exec=node /opt/vtm/index.js
+Exec=node /opt/vtm/vtm.js
 Terminal=false
