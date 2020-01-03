@@ -50,7 +50,7 @@ The following steps depend on your platform & options.
 10. cd to the program's directory and run `pm2 start vtm.js`
 11. Run `pm2 save` to save the process list so it'll be reloaded at reboot.
 
-This installation is single-user. If the display is switched to another user the screenshotter will capture black screens.
+This installation will only work for a single user.
 
 ## Linux (Ubuntu)
 ### All users
