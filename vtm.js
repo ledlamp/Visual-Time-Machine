@@ -16,13 +16,18 @@ async function capture() {
 			let x = cp.stdout.toString().split('\n').find(x => x.startsWith('>'));
 			if (x && x.substr(46, 4) == "Disc") throw "Inactive session"; // will capture black screen otherwise
 		}
-		try {
-			let output = String(exec("powershell ./GetNetworkCostType.ps1", {windowsHide: true})).trim();
+		{
+			let output;
+			try {
+				output = String(exec("powershell ./GetNetworkCostType.ps1", {windowsHide: true})).trim();
+			} catch(e) { console.error(e.message); }
+			if (output)
 			if (output == "Fixed") throw "On metered network";
+			else if (output == "Null") throw "No network";
 			else if (output != "Unrestricted") {
 				console.warn("Unknown output from powershell script:", output);
 			}
-		} catch(e) { console.error(error.message); }
+		}
 	}
 	var filedate = new Date();
 	var filename = `${filedate.toISOString().replace(/:/g, '-')}_${encodeURIComponent(crypto.randomBytes(16).toString('base64'))}.jpg`
