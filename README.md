@@ -16,7 +16,9 @@ Visual Time Machine is a simple Node script that runs as a daemon to capture you
 		"token": "paste_token_here"
 	},
 	"interval": 5000,
-	"capture_console_only": true
+	"capture_console_only": true,
+	"disable_on_inactive_session": false,
+	"disable_on_metered_networks": false
 }
 ```
 5. Create a webhook in the Discord channel you want the images to upload to (presumably a private channel of a private server). Copy the url and take the id and token out of it--the id is the big integer and the token is the long base64 string at the end, separated by slash--and paste in config.
@@ -24,6 +26,10 @@ Visual Time Machine is a simple Node script that runs as a daemon to capture you
 The interval is time in milliseconds _between_ captures. Setting it to 0 will make it capture as fast as possible. Because it's the delay after the previous capture finishes, not a continuous interval starting each capture, it won't cause a stack overflow. It also means it will actually capture at a slightly slower interval than is configured, because the capturing and uploading takes a bit of time. Note that too low values will cause irregular capturing due to rate limiting. 3 seconds (3000 ms) is about the fastest you can consistently send a webhook message on Discord.
 
 (Mac only) If `capture_console_only` is set to true, the screen will only be captured if it is on the physical display. This prevents the user's screen from being captured when it's not being used, though that means it won't be captured if it is used remotely.
+
+If you have a Pro or Enterprise edition of Windows, you can change `disable_on_inactive_session` to `true` to prevent VTM from capturing black screens when you've locked your session.
+
+If you're on Windows 10 and Powershell scripts are enabled, you can toggle `disable_on_metered_networks` to disable capturing when you are connected to a metered network. This might be a bit resource intensive so it's recommended to leave this false if you never connect to metered networks.
 
 6. Test the program by running `node vtm.js` in a Terminal.
 

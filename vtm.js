@@ -10,13 +10,15 @@ var webhook = new Discord.WebhookClient(config.webhook.id, config.webhook.token)
 async function capture() {
 	if (process.platform == "darwin" && config.capture_console_only && exec("stat",  ["-f", "%Su", "/dev/console"]).toString().trim() != os.userInfo().username) throw "Not console";
 	if (process.platform == "win32") {
-		try { //TODO requires pro or enterprise
-			exec("query", ["user"], {windowsHide: true}); // fsr this exits with code 1 which node considers an error
-		} catch(cp) {
-			let x = cp.stdout.toString().split('\n').find(x => x.startsWith('>'));
-			if (x && x.substr(46, 4) == "Disc") throw "Inactive session"; // will capture black screen otherwise
+		if (config.disable_on_inactive_session) {
+			try {
+				exec("query", ["user"], {windowsHide: true}); // fsr this exits with code 1 which node considers an error
+			} catch(cp) {
+				let x = cp.stdout.toString().split('\n').find(x => x.startsWith('>'));
+				if (x && x.substr(46, 4) == "Disc") throw "Inactive session";
+			}
 		}
-		{
+		if (config.disable_on_metered_networks) {
 			let output;
 			try {
 				output = String(exec("powershell.exe", ["./GetNetworkCostType.ps1"], {windowsHide: true})).trim();
