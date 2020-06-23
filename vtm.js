@@ -7,6 +7,7 @@ var config = require("./config");
 
 var webhook = new Discord.WebhookClient(config.webhook.id, config.webhook.token);
 
+var lastdata;
 async function capture() {
 	if (process.platform == "darwin" && config.capture_console_only && exec("stat",  ["-f", "%Su", "/dev/console"]).toString().trim() != os.userInfo().username) throw "Not console";
 	if (process.platform == "win32") {
@@ -42,6 +43,8 @@ async function capture() {
 		exec("import", ["-silent", "-window", "root", filepath]);
 	}
 	var data = fs.readFileSync(filepath);
+	if (lastdata && data.equals(lastdata)) throw "Identical screenshot";
+	else lastdata = data;
 	try {
 		await webhook.send(`y${filedate.getFullYear()} mo${filedate.getMonth()} d${filedate.getDate()} h${filedate.getHours()} mi${filedate.getMinutes()} s${filedate.getSeconds()}`, {files:[{
 			attachment: data,
