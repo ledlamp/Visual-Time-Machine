@@ -50,13 +50,9 @@ The following steps depend on your platform & options.
 10. Run `launchctl load -w ~/Library/LaunchAgents/io.github.ledlamp.vtm.plist` to start the agent. It will automatically start and stop whenever you login and logout.
 
 ## Windows
-7. Put the directory wherever you want. I put mine at `C:\Program Files\Visual Time Machine`.
-8. Install PM2: Run `npm install pm2 -g` in a command prompt.
-9. Run `npm install pm2-windows-startup -g` and `pm2-startup install` to make the PM2 daemon start at boot.
-10. cd to the program's directory and run `pm2 start vtm.js`
-11. Run `pm2 save` to save the process list so it'll be reloaded at reboot.
-
-This installation will only work for a single user.
+7. Put the directory at `%HOMEPATH%\Programs\Visual Time Machine` or wherever you want.
+8. Open Task Scheduler and import the `Visual Time Machine.xml` file. Change the user of the task to your user, and change the working directory of the command if necessary.
+9. Run the task.
 
 ## Linux (Ubuntu)
 ### All users
